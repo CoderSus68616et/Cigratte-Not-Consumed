@@ -1,0 +1,2765 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMPERIALE — Premium Tobacco House</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Cinzel:wght@400;500;600;700;900&family=Quattrocento+Sans:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* ═══════════════════════════════════════
+           ROOT & GLOBAL TOKENS
+        ═══════════════════════════════════════ */
+        :root {
+            --gold: #C9A84C;
+            --gold-light: #E8CC80;
+            --gold-dim: #8B6914;
+            --black: #080707;
+            --deep: #0D0B09;
+            --charcoal: #1A1612;
+            --surface: #201C17;
+            --border: rgba(201, 168, 76, .18);
+            --text-primary: #F0E8D8;
+            --text-muted: #8A7A68;
+            --text-dim: #4A3F32;
+            --red-acc: #8B1A1A;
+            --cream: #F5EDD8;
+            --smoke: rgba(255, 255, 255, .03);
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--black);
+            color: var(--text-primary);
+            font-family: 'Quattrocento Sans', sans-serif;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* ═══════════════════════════════════════
+           CUSTOM CURSOR
+        ═══════════════════════════════════════ */
+        .cursor-dot,
+        .cursor-ring {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition-property: transform, background, width, height, border-color;
+            transition-timing-function: cubic-bezier(.23, 1, .32, 1);
+        }
+
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--gold);
+            border-radius: 50%;
+            transition-duration: .1s;
+        }
+
+        .cursor-ring {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            transition-duration: .4s;
+            opacity: .6;
+        }
+
+        body:has(a:hover) .cursor-ring,
+        body:has(button:hover) .cursor-ring {
+            width: 56px;
+            height: 56px;
+            border-color: var(--gold-light);
+            opacity: 1;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--deep);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold-dim);
+            border-radius: 2px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gold);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9998;
+            opacity: .4;
+        }
+
+        /* ═══════════════════════════════════════
+           NAVIGATION
+        ═══════════════════════════════════════ */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 60px;
+            background: linear-gradient(to bottom, rgba(8, 7, 7, .95) 0%, transparent 100%);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid transparent;
+            transition: border-color .4s, padding .4s;
+        }
+
+        nav.scrolled {
+            border-bottom-color: var(--border);
+            padding: 16px 60px;
+            background: rgba(8, 7, 7, .95);
+        }
+
+        .nav-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: .25em;
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        .nav-logo span {
+            color: var(--text-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            text-decoration: none;
+            position: relative;
+            transition: color .3s;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 100%;
+            height: 1px;
+            background: var(--gold);
+            transition: right .35s cubic-bezier(.23, 1, .32, 1);
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .nav-links a:hover::after {
+            right: 0;
+        }
+
+        .nav-cta {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: .18em;
+            color: var(--black);
+            background: var(--gold);
+            border: none;
+            padding: 10px 26px;
+            cursor: none;
+            text-transform: uppercase;
+            clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+            transition: background .3s, transform .2s;
+        }
+
+        .nav-cta:hover {
+            background: var(--gold-light);
+            transform: scaleX(1.04);
+        }
+
+        /* ═══════════════════════════════════════
+           HERO SECTION
+        ═══════════════════════════════════════ */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            padding: 120px 60px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 70% 80% at 70% 50%, rgba(201, 168, 76, .07) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 60% at 10% 80%, rgba(139, 26, 26, .08) 0%, transparent 60%),
+                linear-gradient(160deg, #0D0B09 0%, #080707 60%, #100C08 100%);
+        }
+
+        .hero-lines {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .hero-lines::before,
+        .hero-lines::after {
+            content: '';
+            position: absolute;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, var(--gold-dim), transparent);
+        }
+
+        .hero-lines::before {
+            left: 60px;
+            top: 0;
+            bottom: 0;
+            opacity: .3;
+        }
+
+        .hero-lines::after {
+            right: 60px;
+            top: 0;
+            bottom: 0;
+            opacity: .2;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-eyebrow {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: .35em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            animation: fadeInUp .8s .2s both;
+        }
+
+        .hero-eyebrow::before {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--gold);
+        }
+
+        .hero-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(52px, 6vw, 88px);
+            font-weight: 700;
+            line-height: .95;
+            color: var(--text-primary);
+            animation: fadeInUp .8s .35s both;
+        }
+
+        .hero-title em {
+            font-style: italic;
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--gold);
+            font-weight: 300;
+            font-size: 1.1em;
+        }
+
+        .hero-subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            font-weight: 300;
+            font-style: italic;
+            color: var(--text-muted);
+            margin: 28px 0 44px;
+            line-height: 1.6;
+            max-width: 420px;
+            animation: fadeInUp .8s .5s both;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            animation: fadeInUp .8s .65s both;
+        }
+
+        .btn-primary {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--black);
+            background: var(--gold);
+            border: none;
+            padding: 16px 40px;
+            cursor: none;
+            clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+            transition: background .3s, box-shadow .3s, transform .2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: var(--gold-light);
+            box-shadow: 0 0 40px rgba(201, 168, 76, .3);
+            transform: translateY(-2px);
+        }
+
+        .btn-ghost {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            background: none;
+            border: 1px solid var(--border);
+            padding: 15px 36px;
+            cursor: none;
+            text-decoration: none;
+            transition: color .3s, border-color .3s;
+        }
+
+        .btn-ghost:hover {
+            color: var(--gold);
+            border-color: var(--gold);
+        }
+
+        /* ═══════════════════════════════════════
+           HERO STAGE — 3D ANIMATED PACK 
+        ═══════════════════════════════════════ */
+        .hero-stage {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 500px;
+            animation: fadeIn 1.2s .4s both;
+            perspective: 1000px;
+        }
+
+        .pack-showcase {
+            position: relative;
+            transform-style: preserve-3d;
+            animation: packSpin 18s linear infinite;
+        }
+
+        @keyframes packSpin {
+            0% {
+                transform: rotateY(0deg) rotateX(10deg);
+            }
+
+            100% {
+                transform: rotateY(360deg) rotateX(10deg);
+            }
+        }
+
+        .pack-box {
+            position: relative;
+            width: 160px;
+            height: 220px;
+            transform-style: preserve-3d;
+        }
+
+        .pack-face {
+            position: absolute;
+            background: linear-gradient(145deg, #1f1b16 0%, #080707 100%);
+            border: 1px solid rgba(201, 168, 76, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: visible;
+        }
+
+        /* Main Pack Body */
+        .pack-front {
+            width: 160px;
+            height: 220px;
+            transform: translateZ(40px);
+        }
+
+        .pack-back {
+            width: 160px;
+            height: 220px;
+            transform: rotateY(180deg) translateZ(40px);
+            background: #080707;
+        }
+
+        .pack-left {
+            width: 80px;
+            height: 220px;
+            transform: rotateY(-90deg) translateZ(80px);
+            background: #12100d;
+        }
+
+        .pack-right {
+            width: 80px;
+            height: 220px;
+            transform: rotateY(90deg) translateZ(80px);
+            background: #12100d;
+        }
+
+        .pack-bottom {
+            width: 160px;
+            height: 80px;
+            transform: rotateX(-90deg) translateZ(110px);
+            background: #000;
+        }
+
+        /* The hinged flip-top lid */
+        .pack-top-lid {
+            position: absolute;
+            width: 160px;
+            height: 80px;
+            background: linear-gradient(to bottom, #1f1b16 0%, #080707 100%);
+            border: 1px solid rgba(201, 168, 76, 0.7);
+            transform-origin: top;
+            transform: translateY(-110px) translateZ(-40px) rotateX(110deg);
+            /* 110deg makes it sit open nicely */
+        }
+
+        .pack-brand {
+            font-family: 'Cinzel', serif;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .pack-sub {
+            font-family: 'Cinzel', serif;
+            font-size: 8px;
+            letter-spacing: 0.2em;
+            color: var(--text-primary);
+        }
+
+        /* Cigarettes inside the pack */
+        .hero-cyl {
+            position: absolute;
+            width: 16px;
+            height: 180px;
+            /* Make them taller so they stick out of the open box */
+            top: 0;
+            left: 50%;
+            margin-left: -8px;
+            transform-style: preserve-3d;
+            transform: translateX(var(--tx)) translateY(var(--ty)) translateZ(var(--tz));
+        }
+
+        .hc-face {
+            position: absolute;
+            width: 16px;
+            height: 180px;
+            background: linear-gradient(to right, #d4cbb8 0%, #ffffff 40%, #ffffff 60%, #c5bca8 100%);
+        }
+
+        .hc-front {
+            transform: translateZ(8px);
+        }
+
+        .hc-back {
+            transform: rotateY(180deg) translateZ(8px);
+            background: #c5bca8;
+        }
+
+        .hc-left {
+            transform: rotateY(-90deg) translateZ(8px);
+        }
+
+        .hc-right {
+            transform: rotateY(90deg) translateZ(8px);
+        }
+
+        /* Filter top caps and filter section */
+        .hc-filter-wrap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 16px;
+            height: 45px;
+            transform-style: preserve-3d;
+        }
+
+        .hc-filter {
+            position: absolute;
+            width: 16px;
+            height: 45px;
+            background: linear-gradient(to right, #986A1A 0%, #D4A840 30%, #E8B850 50%, #B88C3C 80%, #7A5010 100%);
+        }
+
+        .hcf-front {
+            transform: translateZ(8.2px);
+        }
+
+        .hcf-back {
+            transform: rotateY(180deg) translateZ(8.2px);
+        }
+
+        .hcf-left {
+            transform: rotateY(-90deg) translateZ(8.2px);
+        }
+
+        .hcf-right {
+            transform: rotateY(90deg) translateZ(8.2px);
+        }
+
+        .hc-cap {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 0;
+            left: 0;
+            border-radius: 50%;
+            transform: rotateX(90deg) translateZ(0px);
+            background: #D4A840;
+        }
+
+        /* Pack shadow */
+        .pack-shadow {
+            position: absolute;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%) rotateX(90deg);
+            width: 240px;
+            height: 120px;
+            background: radial-gradient(ellipse, rgba(201, 168, 76, 0.25) 0%, transparent 60%);
+            border-radius: 50%;
+            filter: blur(10px);
+        }
+
+        /* ═══════════════════════════════════════
+           MARQUEE STRIP
+        ═══════════════════════════════════════ */
+        .marquee-strip {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 0;
+            background: var(--surface);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .marquee-inner {
+            display: inline-block;
+            animation: marqueeScroll 30s linear infinite;
+        }
+
+        .marquee-inner span {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: .25em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin: 0 32px;
+        }
+
+        .marquee-inner span.accent {
+            color: var(--gold);
+        }
+
+        @keyframes marqueeScroll {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* ═══════════════════════════════════════
+           FILTER BAR
+        ═══════════════════════════════════════ */
+        .filter-section {
+            padding: 72px 60px 40px;
+        }
+
+        .section-label {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: .35em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .section-label::before {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--gold);
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(32px, 4vw, 52px);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 48px;
+            line-height: 1.1;
+        }
+
+        .section-title em {
+            font-style: italic;
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--gold);
+            font-weight: 300;
+        }
+
+        .filters {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 0;
+        }
+
+        .filter-btn {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 10px 24px;
+            cursor: none;
+            transition: all .3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gold);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform .3s cubic-bezier(.23, 1, .32, 1);
+            z-index: -1;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            color: var(--black);
+            border-color: var(--gold);
+        }
+
+        .filter-btn.active::before,
+        .filter-btn:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* ═══════════════════════════════════════
+           PRODUCT GRID
+        ═══════════════════════════════════════ */
+        .products-section {
+            padding: 20px 60px 100px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2px;
+        }
+
+        .product-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            cursor: none;
+            transition: border-color .4s, transform .4s cubic-bezier(.23, 1, .32, 1);
+            animation: cardReveal .6s both;
+        }
+
+        .product-card:hover {
+            border-color: var(--gold);
+            z-index: 2;
+        }
+
+        @keyframes cardReveal {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-type-bar {
+            height: 3px;
+            background: var(--gold);
+        }
+
+        .card-type-bar.cigar {
+            background: linear-gradient(to right, #6B3A1F, #C49A4A, #6B3A1F);
+        }
+
+        .card-type-bar.cig {
+            background: linear-gradient(to right, #1A1A8B, #C9A84C, #1A1A8B);
+        }
+
+        .card-type-bar.menthol {
+            background: linear-gradient(to right, #0D4A2F, #4ACAA8, #0D4A2F);
+        }
+
+        .card-inner {
+            padding: 36px;
+        }
+
+        .card-model-stage {
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 600px;
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .card-model-stage::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* ─── IMPROVED INLINE CIGARETTE 3D (card) ─── */
+        .mini-cig {
+            transform-style: preserve-3d;
+            position: relative;
+            animation: cardFloat 5s ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+        }
+
+        @keyframes cardFloat {
+
+            0%,
+            100% {
+                transform: rotateY(var(--ry, -30deg)) rotateX(12deg) translateY(0);
+            }
+
+            50% {
+                transform: rotateY(var(--ry, -30deg)) rotateX(12deg) translateY(-12px);
+            }
+        }
+
+        .mini-cig-wrap {
+            width: 200px;
+            height: 18px;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        .mcf {
+            position: absolute;
+            width: 200px;
+            height: 18px;
+            background: linear-gradient(to bottom, #d4cbb8 0%, #fdfbf7 30%, #ffffff 50%, #eae4d6 80%, #c5bca8 100%);
+        }
+
+        .mcf.top {
+            transform: translateZ(9px);
+        }
+
+        .mcf.bottom {
+            transform: rotateX(180deg) translateZ(9px);
+            background: #b8ac98;
+        }
+
+        .mcf.front {
+            transform: rotateY(90deg) rotateX(-90deg) translateZ(-9px) translateX(-9px) translateY(9px);
+        }
+
+        .mcf.back {
+            transform: rotateY(90deg) rotateX(90deg) translateZ(-9px) translateX(-9px) translateY(-9px);
+        }
+
+        /* Realistic End Caps for Cylindrical look */
+        .mcf.cap-left {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            transform: rotateY(-90deg) translateZ(9px);
+            background: radial-gradient(circle, #fff, #ff5e00 20%, #cc1100 50%, #222 90%);
+            box-shadow: 0 0 10px 1px rgba(255, 69, 0, 0.6);
+        }
+
+        .mcf.cap-right {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            transform: rotateY(90deg) translateZ(191px);
+            background: var(--tip-btm, #886018);
+        }
+
+        /* filter tip */
+        .mini-tip {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 48px;
+            height: 18px;
+            transform-style: preserve-3d;
+        }
+
+        .mtf {
+            position: absolute;
+            width: 48px;
+            height: 18px;
+            background: linear-gradient(to bottom, var(--tip-btm) 0%, var(--tip-top) 30%, #ffdda1 50%, var(--tip-front) 80%, #5a3e0c 100%);
+        }
+
+        .mtf.top {
+            transform: translateZ(9.2px);
+        }
+
+        .mtf.bottom {
+            transform: rotateX(180deg) translateZ(9.2px);
+        }
+
+        .mtf.front {
+            transform: rotateY(90deg) rotateX(-90deg) translateZ(-9.2px) translateX(-9.2px) translateY(9.2px);
+        }
+
+        .mini-band {
+            position: absolute;
+            top: 0;
+            height: 18px;
+            left: var(--band-left, 55px);
+            width: var(--band-w, 36px);
+            background: var(--band-color, #8B1A1A);
+            transform: translateZ(9.5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cinzel', serif;
+            font-size: 3.5px;
+            letter-spacing: .1em;
+            color: rgba(255, 255, 255, .8);
+            text-transform: uppercase;
+            border-left: 1px solid rgba(201, 168, 76, .5);
+            border-right: 1px solid rgba(201, 168, 76, .5);
+        }
+
+        /* ─── IMPROVED INLINE CIGAR 3D (card) ─── */
+        .mini-cigar {
+            transform-style: preserve-3d;
+            animation: cardFloat 6s ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+        }
+
+        .mini-cigar-wrap {
+            width: 200px;
+            height: 26px;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        .mcigarface {
+            position: absolute;
+            background: linear-gradient(to bottom, var(--cigar-dk) 0%, var(--cigar-hi) 30%, var(--cigar-hi) 50%, var(--cigar-lo) 80%, var(--cigar-dk) 100%);
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0, 0, 0, 0.05) 10px, rgba(0, 0, 0, 0.05) 11px),
+                linear-gradient(to bottom, var(--cigar-dk) 0%, var(--cigar-hi) 30%, var(--cigar-hi) 50%, var(--cigar-lo) 80%, var(--cigar-dk) 100%);
+        }
+
+        .mcigarface.top {
+            width: 200px;
+            height: 26px;
+            transform: translateZ(13px);
+        }
+
+        .mcigarface.bottom {
+            width: 200px;
+            height: 26px;
+            transform: rotateX(180deg) translateZ(13px);
+        }
+
+        .mcigarface.front {
+            width: 200px;
+            height: 26px;
+            transform: rotateY(90deg) rotateX(-90deg) translateZ(-13px) translateX(-13px) translateY(13px);
+        }
+
+        .mcigarface.back {
+            width: 200px;
+            height: 26px;
+            transform: rotateY(90deg) rotateX(90deg) translateZ(-13px) translateX(-13px) translateY(-13px);
+        }
+
+        /* Cigar realistic round caps */
+        .mcigarface.cap-left {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--cigar-foot, #3A1F0D);
+            transform: rotateY(-90deg) translateZ(13px);
+            background-image: repeating-radial-gradient(circle at center, transparent, rgba(0, 0, 0, 0.4) 2px);
+        }
+
+        .mcigarface.cap-right {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--cigar-cap, #5A3520);
+            transform: rotateY(90deg) translateZ(187px);
+        }
+
+        .cigar-band-wrap {
+            position: absolute;
+            top: 0;
+            height: 26px;
+            left: var(--cband-left, 60px);
+            width: var(--cband-w, 50px);
+            transform: translateZ(13.5px);
+            background: var(--cband-bg, #1A1A8B);
+            border-left: 1.5px solid var(--gold);
+            border-right: 1.5px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1px;
+            overflow: hidden;
+        }
+
+        .cigar-band-name {
+            font-family: 'Cinzel', serif;
+            font-size: 4px;
+            letter-spacing: .15em;
+            color: var(--gold);
+            text-transform: uppercase;
+        }
+
+        .cigar-band-sub {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5px;
+            color: rgba(255, 255, 255, .6);
+            font-style: italic;
+            letter-spacing: .05em;
+        }
+
+        /* ─── CARD TEXT ─── */
+        .card-brand-label {
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: .3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+
+        .card-brand-name {
+            font-family: 'Cinzel', serif;
+            font-size: 26px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .card-brand-variant {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 16px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .card-divider {
+            width: 40px;
+            height: 1px;
+            background: var(--gold);
+            margin-bottom: 20px;
+            transition: width .4s;
+        }
+
+        .product-card:hover .card-divider {
+            width: 100%;
+        }
+
+        .card-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .info-label {
+            font-family: 'Cinzel', serif;
+            font-size: 8px;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-family: 'Quattrocento Sans', serif;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .card-desc {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 15px;
+            font-style: italic;
+            color: var(--text-muted);
+            line-height: 1.65;
+            margin-bottom: 28px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .card-btn-buy {
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--black);
+            background: var(--gold);
+            border: none;
+            padding: 11px 28px;
+            cursor: none;
+            flex: 1;
+            clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+            transition: background .3s, box-shadow .3s;
+        }
+
+        .card-btn-buy:hover {
+            background: var(--gold-light);
+            box-shadow: 0 0 24px rgba(201, 168, 76, .35);
+        }
+
+        .card-btn-info {
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 10px 20px;
+            cursor: none;
+            transition: color .3s, border-color .3s;
+        }
+
+        .card-btn-info:hover {
+            color: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 48px;
+            right: 36px;
+            font-family: 'Cinzel', serif;
+            font-size: 8px;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: var(--black);
+            background: var(--gold);
+            padding: 4px 12px;
+            clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+        }
+
+        /* ═══════════════════════════════════════
+           STATS BAR
+        ═══════════════════════════════════════ */
+        .stats-bar {
+            background: var(--charcoal);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .stat-item {
+            padding: 44px 40px;
+            border-right: 1px solid var(--border);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: background .3s;
+        }
+
+        .stat-item:last-child {
+            border-right: none;
+        }
+
+        .stat-item:hover {
+            background: rgba(201, 168, 76, .04);
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transform: translateX(-50%);
+            transition: width .4s cubic-bezier(.23, 1, .32, 1);
+        }
+
+        .stat-item:hover::before {
+            width: 60%;
+        }
+
+        .stat-num {
+            font-family: 'Cinzel', serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--gold);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* ═══════════════════════════════════════
+           FOOTER TOBACCO TYPES (3D ANIMATIONS)
+        ═══════════════════════════════════════ */
+        .footer-tobacco-types {
+            margin-bottom: 60px;
+            padding-bottom: 60px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tobacco-types-title {
+            font-family: 'Cinzel', serif;
+            font-size: 24px;
+            color: var(--text-primary);
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .tobacco-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 32px;
+        }
+
+        .tobacco-card {
+            background: var(--charcoal);
+            border: 1px solid var(--border);
+            padding: 20px;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .tobacco-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+        }
+
+        .tobacco-name {
+            font-family: 'Cinzel', serif;
+            font-size: 16px;
+            color: var(--gold);
+            margin-bottom: 8px;
+            letter-spacing: 0.1em;
+        }
+
+        .tobacco-desc {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        .tobacco-anim-stage {
+            width: 100%;
+            height: 140px;
+            background: radial-gradient(circle at bottom, #2a251e 0%, #110e0c 100%);
+            border-bottom: 2px solid var(--gold);
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .glowing-ember {
+            width: 40px;
+            height: 12px;
+            background: radial-gradient(ellipse at center, #ffdd00 0%, #ff5e00 30%, #cc1100 60%, #222 100%);
+            border-radius: 50%;
+            margin-bottom: 15px;
+            box-shadow: 0 0 25px #ff5e00;
+            animation: glowEmber 2s infinite alternate;
+            z-index: 2;
+        }
+
+        .ash-pile {
+            position: absolute;
+            bottom: 10px;
+            width: 60px;
+            height: 18px;
+            background: #666;
+            border-radius: 50%;
+            filter: blur(3px);
+            z-index: 1;
+        }
+
+        .smoke-puff {
+            position: absolute;
+            bottom: 20px;
+            width: 25px;
+            height: 25px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 50%;
+            filter: blur(8px);
+            animation: floatSmoke 4s infinite ease-out;
+        }
+
+        .s1 {
+            left: 40%;
+            animation-delay: 0s;
+        }
+
+        .s2 {
+            left: 50%;
+            animation-delay: 1.3s;
+        }
+
+        .s3 {
+            left: 45%;
+            animation-delay: 2.6s;
+        }
+
+        @keyframes glowEmber {
+            from {
+                opacity: 0.8;
+                box-shadow: 0 0 15px #ff5e00;
+                transform: scale(1);
+            }
+
+            to {
+                opacity: 1;
+                box-shadow: 0 0 35px #ff5e00, inset 0 0 5px #fff;
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes floatSmoke {
+            0% {
+                transform: translateY(0) scale(1) translateX(0);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(-120px) scale(3.5) translateX(25px);
+                opacity: 0;
+            }
+        }
+
+        /* ═══════════════════════════════════════
+           FOOTER (LIGHTER & CIGARETTE SCENE)
+        ═══════════════════════════════════════ */
+        footer {
+            background: var(--deep);
+            border-top: 1px solid var(--border);
+            padding: 80px 60px 40px;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .footer-brand-name {
+            font-family: 'Cinzel', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 16px;
+        }
+
+        .footer-desc {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.7;
+            max-width: 280px;
+            margin-bottom: 24px;
+        }
+
+        .footer-scene-wrap {
+            position: relative;
+            width: 200px;
+            height: 120px;
+            perspective: 600px;
+            margin-bottom: 20px;
+        }
+
+        /* 3D Lighter */
+        .fs-lighter {
+            position: absolute;
+            transform-style: preserve-3d;
+            transform: rotateY(-30deg) rotateX(10deg);
+            left: 80px;
+            top: 40px;
+        }
+
+        .fsl-body {
+            width: 35px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-dim), #4a380a);
+            border-radius: 4px;
+            border: 1px solid #aa8529;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6), 5px 5px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .fsl-lid {
+            width: 35px;
+            height: 18px;
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-dim), #4a380a);
+            border-radius: 4px 4px 0 0;
+            border: 1px solid #aa8529;
+            position: absolute;
+            top: -18px;
+            left: 0;
+            transform-origin: bottom right;
+            transform: rotateZ(50deg);
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .fsl-flame {
+            position: absolute;
+            top: -30px;
+            left: 10px;
+            width: 14px;
+            height: 26px;
+            background: radial-gradient(ellipse at bottom, #fff 0%, #ffdd00 20%, #ff5e00 60%, transparent 100%);
+            border-radius: 50% 50% 20% 20%;
+            filter: blur(1px);
+            animation: flicker 0.08s infinite alternate;
+            box-shadow: 0 -5px 20px #ff5e00;
+        }
+
+        @keyframes flicker {
+            0% {
+                transform: scaleX(1) scaleY(1) rotate(-2deg);
+                opacity: 0.9;
+            }
+
+            100% {
+                transform: scaleX(1.1) scaleY(1.05) rotate(2deg);
+                opacity: 1;
+            }
+        }
+
+        /* Burning Cigarette resting */
+        .fs-cig {
+            position: absolute;
+            width: 90px;
+            height: 10px;
+            background: linear-gradient(to bottom, #fdfbf7 0%, #d4cbb8 50%, #b8ac98 100%);
+            transform: rotateZ(-15deg);
+            left: -20px;
+            top: 25px;
+            border-radius: 2px;
+            box-shadow: 3px 8px 12px rgba(0, 0, 0, 0.8);
+            z-index: 10;
+        }
+
+        .fs-filter {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 25px;
+            height: 10px;
+            background: linear-gradient(to bottom, #D4A840 0%, #B88C3C 50%, #7A5010 100%);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .fs-cherry {
+            position: absolute;
+            left: -2px;
+            top: -1px;
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle, #fff, #ff5e00 40%, #cc1100 80%, #333 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 15px #ff5e00;
+            animation: pulseCherry 1.5s infinite alternate;
+        }
+
+        .fs-smoke-trail {
+            position: absolute;
+            left: 0px;
+            bottom: 5px;
+            width: 8px;
+            height: 50px;
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.3), transparent);
+            border-radius: 50%;
+            filter: blur(4px);
+            animation: riseSmoke 2.5s infinite ease-out;
+            transform-origin: bottom;
+        }
+
+        @keyframes pulseCherry {
+            0% {
+                box-shadow: 0 0 10px #ff5e00;
+            }
+
+            100% {
+                box-shadow: 0 0 25px #ff5e00, inset 0 0 5px #fff;
+            }
+        }
+
+        .footer-heading {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: .25em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 24px;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-links a {
+            font-family: 'Quattrocento Sans', sans-serif;
+            font-size: 13px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color .3s, padding-left .3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+            padding-left: 8px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-copy {
+            font-family: 'Quattrocento Sans', sans-serif;
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+
+        .footer-legal {
+            font-family: 'Quattrocento Sans', sans-serif;
+            font-size: 11px;
+            color: var(--text-dim);
+            text-align: center;
+            flex: 1;
+            padding: 0 20px;
+            line-height: 1.5;
+        }
+
+        /* ═══════════════════════════════════════
+           MODAL OVERLAY
+        ═══════════════════════════════════════ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(8, 7, 7, .92);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .4s;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            width: min(760px, 90vw);
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 52px;
+            position: relative;
+            transform: translateY(30px);
+            transition: transform .4s cubic-bezier(.23, 1, .32, 1);
+        }
+
+        .modal-overlay.open .modal-box {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 36px;
+            height: 36px;
+            background: transparent;
+            border: 1px solid var(--border);
+            cursor: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 18px;
+            transition: all .3s;
+        }
+
+        .modal-close:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .modal-header {
+            margin-bottom: 32px;
+        }
+
+        .modal-brand {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: .3em;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+
+        .modal-title {
+            font-family: 'Cinzel', serif;
+            font-size: 38px;
+            color: var(--text-primary);
+        }
+
+        .modal-variant {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 20px;
+            color: var(--text-muted);
+        }
+
+        .modal-divider {
+            width: 60px;
+            height: 1px;
+            background: var(--gold);
+            margin: 20px 0;
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 28px;
+        }
+
+        .modal-stat-label {
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 4px;
+        }
+
+        .modal-stat-value {
+            font-family: 'Quattrocento Sans', sans-serif;
+            font-size: 15px;
+            color: var(--text-primary);
+        }
+
+        .modal-desc {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 17px;
+            color: var(--text-muted);
+            line-height: 1.75;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0
+            }
+
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @media(max-width:900px) {
+            nav {
+                padding: 20px 24px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 120px 24px 60px;
+            }
+
+            .hero-stage {
+                height: 280px;
+            }
+
+            .filter-section,
+            .products-section {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-bar {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .footer-top {
+                grid-template-columns: 1fr 1fr;
+                gap: 36px;
+            }
+
+            footer {
+                padding: 60px 24px 32px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <nav id="mainNav">
+        <a href="#" class="nav-logo">IMP<span>ERIALE</span></a>
+        <ul class="nav-links">
+            <li><a href="#collection">Collection</a></li>
+            <li><a href="#cigars">Cigars</a></li>
+            <li><a href="#cigarettes">Cigarettes</a></li>
+            <li><a href="#heritage">Heritage</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="nav-cta">Enquire Now</button>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-lines"></div>
+
+        <div class="hero-content">
+            <p class="hero-eyebrow">Est. 2024 · Premium Tobacco House</p>
+            <h1 class="hero-title">The World's<br><em>Finest</em><br>Tobacco</h1>
+            <p class="hero-subtitle">A curated collection of the world's most distinguished cigarette and cigar brands,
+                presented with uncompromising elegance.</p>
+            <div class="hero-actions">
+                <a href="#collection" class="btn-primary">Explore Collection</a>
+                <a href="#heritage" class="btn-ghost">Our Heritage</a>
+            </div>
+        </div>
+
+        <div class="hero-stage">
+            <div class="pack-showcase">
+                <div class="pack-box">
+                    <div class="pack-face pack-front">
+                        <div class="pack-brand">IMPERIALE</div>
+                        <div class="pack-sub">PREMIUM BLEND</div>
+                    </div>
+                    <div class="pack-face pack-back"></div>
+                    <div class="pack-face pack-left"></div>
+                    <div class="pack-face pack-right"></div>
+                    <div class="pack-face pack-bottom"></div>
+                    <div class="pack-top-lid"></div>
+
+                    <div class="hero-cyl" style="--tx: -55px; --ty: -60px; --tz: 20px;">
+                        <div class="hc-face hc-front"></div>
+                        <div class="hc-face hc-back"></div>
+                        <div class="hc-face hc-left"></div>
+                        <div class="hc-face hc-right"></div>
+                        <div class="hc-filter-wrap">
+                            <div class="hc-filter hcf-front"></div>
+                            <div class="hc-filter hcf-back"></div>
+                            <div class="hc-filter hcf-left"></div>
+                            <div class="hc-filter hcf-right"></div>
+                        </div>
+                        <div class="hc-cap"></div>
+                    </div>
+                    <div class="hero-cyl" style="--tx: -18px; --ty: -50px; --tz: 20px;">
+                        <div class="hc-face hc-front"></div>
+                        <div class="hc-face hc-back"></div>
+                        <div class="hc-face hc-left"></div>
+                        <div class="hc-face hc-right"></div>
+                        <div class="hc-filter-wrap">
+                            <div class="hc-filter hcf-front"></div>
+                            <div class="hc-filter hcf-back"></div>
+                            <div class="hc-filter hcf-left"></div>
+                            <div class="hc-filter hcf-right"></div>
+                        </div>
+                        <div class="hc-cap"></div>
+                    </div>
+                    <div class="hero-cyl" style="--tx: 18px; --ty: -55px; --tz: 20px;">
+                        <div class="hc-face hc-front"></div>
+                        <div class="hc-face hc-back"></div>
+                        <div class="hc-face hc-left"></div>
+                        <div class="hc-face hc-right"></div>
+                        <div class="hc-filter-wrap">
+                            <div class="hc-filter hcf-front"></div>
+                            <div class="hc-filter hcf-back"></div>
+                            <div class="hc-filter hcf-left"></div>
+                            <div class="hc-filter hcf-right"></div>
+                        </div>
+                        <div class="hc-cap"></div>
+                    </div>
+                    <div class="hero-cyl" style="--tx: 55px; --ty: -65px; --tz: 20px;">
+                        <div class="hc-face hc-front"></div>
+                        <div class="hc-face hc-back"></div>
+                        <div class="hc-face hc-left"></div>
+                        <div class="hc-face hc-right"></div>
+                        <div class="hc-filter-wrap">
+                            <div class="hc-filter hcf-front"></div>
+                            <div class="hc-filter hcf-back"></div>
+                            <div class="hc-filter hcf-left"></div>
+                            <div class="hc-filter hcf-right"></div>
+                        </div>
+                        <div class="hc-cap"></div>
+                    </div>
+                    <div class="hero-cyl" style="--tx: -36px; --ty: -70px; --tz: 0px;">
+                        <div class="hc-face hc-front"></div>
+                        <div class="hc-face hc-back"></div>
+                        <div class="hc-face hc-left"></div>
+                        <div class="hc-face hc-right"></div>
+                        <div class="hc-filter-wrap">
+                            <div class="hc-filter hcf-front"></div>
+                            <div class="hc-filter hcf-back"></div>
+                            <div class="hc-filter hcf-left"></div>
+                            <div class="hc-filter hcf-right"></div>
+                        </div>
+                        <div class="hc-cap"></div>
+                    </div>
+                    <div class="hero-cyl" style="--tx: 0px; --ty: -60px; --tz: 0px;">
+                        <div class="hc-face hc-front"></div>
+                        <div class="hc-face hc-back"></div>
+                        <div class="hc-face hc-left"></div>
+                        <div class="hc-face hc-right"></div>
+                        <div class="hc-filter-wrap">
+                            <div class="hc-filter hcf-front"></div>
+                            <div class="hc-filter hcf-back"></div>
+                            <div class="hc-filter hcf-left"></div>
+                            <div class="hc-filter hcf-right"></div>
+                        </div>
+                        <div class="hc-cap"></div>
+                    </div>
+                    <div class="hero-cyl" style="--tx: 36px; --ty: -75px; --tz: 0px;">
+                        <div class="hc-face hc-front"></div>
+                        <div class="hc-face hc-back"></div>
+                        <div class="hc-face hc-left"></div>
+                        <div class="hc-face hc-right"></div>
+                        <div class="hc-filter-wrap">
+                            <div class="hc-filter hcf-front"></div>
+                            <div class="hc-filter hcf-back"></div>
+                            <div class="hc-filter hcf-left"></div>
+                            <div class="hc-filter hcf-right"></div>
+                        </div>
+                        <div class="hc-cap"></div>
+                    </div>
+                    <div class="hero-cyl" style="--tx: -55px; --ty: -80px; --tz: -20px;">
+                        <div class="hc-face hc-front"></div>
+                        <div class="hc-face hc-back"></div>
+                        <div class="hc-face hc-left"></div>
+                        <div class="hc-face hc-right"></div>
+                        <div class="hc-filter-wrap">
+                            <div class="hc-filter hcf-front"></div>
+                            <div class="hc-filter hcf-back"></div>
+                            <div class="hc-filter hcf-left"></div>
+                            <div class="hc-filter hcf-right"></div>
+                        </div>
+                        <div class="hc-cap"></div>
+                    </div>
+                    <div class="hero-cyl" style="--tx: -18px; --ty: -85px; --tz: -20px;">
+                        <div class="hc-face hc-front"></div>
+                        <div class="hc-face hc-back"></div>
+                        <div class="hc-face hc-left"></div>
+                        <div class="hc-face hc-right"></div>
+                        <div class="hc-filter-wrap">
+                            <div class="hc-filter hcf-front"></div>
+                            <div class="hc-filter hcf-back"></div>
+                            <div class="hc-filter hcf-left"></div>
+                            <div class="hc-filter hcf-right"></div>
+                        </div>
+                        <div class="hc-cap"></div>
+                    </div>
+                    <div class="hero-cyl" style="--tx: 18px; --ty: -75px; --tz: -20px;">
+                        <div class="hc-face hc-front"></div>
+                        <div class="hc-face hc-back"></div>
+                        <div class="hc-face hc-left"></div>
+                        <div class="hc-face hc-right"></div>
+                        <div class="hc-filter-wrap">
+                            <div class="hc-filter hcf-front"></div>
+                            <div class="hc-filter hcf-back"></div>
+                            <div class="hc-filter hcf-left"></div>
+                            <div class="hc-filter hcf-right"></div>
+                        </div>
+                        <div class="hc-cap"></div>
+                    </div>
+                    <div class="hero-cyl" style="--tx: 55px; --ty: -80px; --tz: -20px;">
+                        <div class="hc-face hc-front"></div>
+                        <div class="hc-face hc-back"></div>
+                        <div class="hc-face hc-left"></div>
+                        <div class="hc-face hc-right"></div>
+                        <div class="hc-filter-wrap">
+                            <div class="hc-filter hcf-front"></div>
+                            <div class="hc-filter hcf-back"></div>
+                            <div class="hc-filter hcf-left"></div>
+                            <div class="hc-filter hcf-right"></div>
+                        </div>
+                        <div class="hc-cap"></div>
+                    </div>
+                </div>
+                <div class="pack-shadow"></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="marquee-strip">
+        <div class="marquee-inner">
+            <span class="accent">Marlboro</span><span>·</span>
+            <span>Cohiba</span><span>·</span>
+            <span class="accent">Montecristo</span><span>·</span>
+            <span>Davidoff</span><span>·</span>
+            <span class="accent">Lucky Strike</span><span>·</span>
+            <span>Romeo y Julieta</span><span>·</span>
+            <span class="accent">Dunhill</span><span>·</span>
+            <span>Arturo Fuente</span><span>·</span>
+            <span class="accent">Camel</span><span>·</span>
+            <span>Padron</span><span>·</span>
+            <span class="accent">Marlboro</span><span>·</span>
+            <span>Cohiba</span><span>·</span>
+            <span class="accent">Montecristo</span><span>·</span>
+            <span>Davidoff</span><span>·</span>
+            <span class="accent">Lucky Strike</span><span>·</span>
+            <span>Romeo y Julieta</span><span>·</span>
+            <span class="accent">Dunhill</span><span>·</span>
+            <span>Arturo Fuente</span><span>·</span>
+            <span class="accent">Camel</span><span>·</span>
+            <span>Padron</span><span>·</span>
+        </div>
+    </div>
+
+    <section class="filter-section" id="collection">
+        <p class="section-label">Our Collection</p>
+        <h2 class="section-title">The <em>Complete</em> Collection</h2>
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">All Products</button>
+            <button class="filter-btn" data-filter="cigarette">Cigarettes</button>
+            <button class="filter-btn" data-filter="cigar">Cigars</button>
+            <button class="filter-btn" data-filter="menthol">Menthol</button>
+            <button class="filter-btn" data-filter="premium">Premium</button>
+        </div>
+    </section>
+
+    <section class="products-section">
+        <div class="products-grid" id="productsGrid">
+
+            <div class="product-card" data-type="cigarette" data-delay="0">
+                <div class="card-type-bar cig"></div>
+                <div class="card-inner">
+                    <span class="card-badge">Bestseller</span>
+                    <div class="card-model-stage">
+                        <div class="mini-cig" style="--ry:-28deg;--delay:0s">
+                            <div class="mini-cig-wrap">
+                                <div class="mcf cap-left"></div>
+                                <div class="mcf cap-right" style="--tip-btm:#886018"></div>
+                                <div class="mcf top" style="--cig-top:#F0E8D4"></div>
+                                <div class="mcf bottom" style="--cig-btm:#C8B898"></div>
+                                <div class="mcf front" style="--cig-front:#E8DDC8"></div>
+                                <div class="mcf back" style="--cig-back:#B8AE9A"></div>
+                                <div class="mini-tip">
+                                    <div class="mtf top" style="--tip-top:#C49A4A"></div>
+                                    <div class="mtf bottom" style="--tip-btm:#886018"></div>
+                                    <div class="mtf front" style="--tip-front:#A07830"></div>
+                                </div>
+                                <div class="mini-band" style="--band-color:#B22222;--band-left:55px;--band-w:36px">
+                                    MARLBORO</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-brand-label">Philip Morris</p>
+                    <h3 class="card-brand-name">Marlboro</h3>
+                    <p class="card-brand-variant">Red · Full Flavour</p>
+                    <div class="card-divider"></div>
+                    <div class="card-info-grid">
+                        <div class="card-info-item">
+                            <p class="info-label">Type</p>
+                            <p class="info-value">Cigarette</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Origin</p>
+                            <p class="info-value">USA</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Strength</p>
+                            <p class="info-value">Full</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Pack</p>
+                            <p class="info-value">20 / Box</p>
+                        </div>
+                    </div>
+                    <p class="card-desc">The world's best-selling cigarette brand. Iconic red packaging with a bold,
+                        full-flavoured American blend profile.</p>
+                    <div class="card-actions">
+                        <button class="card-btn-buy">Add to Order</button>
+                        <button class="card-btn-info" onclick="openModal('marlboro')">Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card" data-type="cigar premium" data-delay="1">
+                <div class="card-type-bar cigar"></div>
+                <div class="card-inner">
+                    <span class="card-badge" style="background:var(--gold-dim);color:var(--gold-light)">Prestige</span>
+                    <div class="card-model-stage">
+                        <div class="mini-cigar" style="--delay:.3s">
+                            <div class="mini-cigar-wrap">
+                                <div class="mcigarface cap-left" style="--cigar-foot:#3A1F0D"></div>
+                                <div class="mcigarface cap-right" style="--cigar-cap:#2A1008"></div>
+                                <div class="mcigarface top"
+                                    style="--cigar-hi:#7B4A28;--cigar-lo:#5A2E10;--cigar-dk:#3A1A05"></div>
+                                <div class="mcigarface bottom"
+                                    style="--cigar-hi:#7B4A28;--cigar-lo:#5A2E10;--cigar-dk:#3A1A05"></div>
+                                <div class="mcigarface front" style="--cigar-hi:#8B5A38;--cigar-lo:#6B3A1F"></div>
+                                <div class="mcigarface back" style="--cigar-dk:#3A1A05"></div>
+                                <div class="cigar-band-wrap"
+                                    style="--cband-left:55px;--cband-w:55px;--cband-bg:#0A0A3A">
+                                    <div class="cigar-band-name">COHIBA</div>
+                                    <div class="cigar-band-sub">Behike · BHK 52</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-brand-label">Habanos S.A. · Cuba</p>
+                    <h3 class="card-brand-name">Cohiba</h3>
+                    <p class="card-brand-variant">Behike BHK 52</p>
+                    <div class="card-divider"></div>
+                    <div class="card-info-grid">
+                        <div class="card-info-item">
+                            <p class="info-label">Type</p>
+                            <p class="info-value">Premium Cigar</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Origin</p>
+                            <p class="info-value">Cuba</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Ring Gauge</p>
+                            <p class="info-value">52</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Length</p>
+                            <p class="info-value">5¼ inches</p>
+                        </div>
+                    </div>
+                    <p class="card-desc">Widely regarded as the world's finest cigar. Triple ligero filler wrapped in a
+                        silky Medio Tiempo leaf — a legend in every sense.</p>
+                    <div class="card-actions">
+                        <button class="card-btn-buy">Add to Order</button>
+                        <button class="card-btn-info" onclick="openModal('cohiba')">Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card" data-type="cigarette" data-delay="2">
+                <div class="card-type-bar cig"></div>
+                <div class="card-inner">
+                    <div class="card-model-stage">
+                        <div class="mini-cig" style="--ry:-22deg;--delay:.5s">
+                            <div class="mini-cig-wrap">
+                                <div class="mcf cap-left"></div>
+                                <div class="mcf cap-right" style="--tip-btm:#906020"></div>
+                                <div class="mcf top" style="--cig-top:#EDE4CC"></div>
+                                <div class="mcf bottom" style="--cig-btm:#C8B890"></div>
+                                <div class="mcf front" style="--cig-front:#E5DBC0"></div>
+                                <div class="mcf back" style="--cig-back:#B8AE90"></div>
+                                <div class="mini-tip">
+                                    <div class="mtf top" style="--tip-top:#C8A04A"></div>
+                                    <div class="mtf bottom" style="--tip-btm:#906020"></div>
+                                    <div class="mtf front" style="--tip-front:#A87828"></div>
+                                </div>
+                                <div class="mini-band"
+                                    style="--band-color:#D4A017;--band-left:52px;--band-w:40px;color:#5A3800">CAMEL
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-brand-label">R.J. Reynolds</p>
+                    <h3 class="card-brand-name">Camel</h3>
+                    <p class="card-brand-variant">Original · Turkish Blend</p>
+                    <div class="card-divider"></div>
+                    <div class="card-info-grid">
+                        <div class="card-info-item">
+                            <p class="info-label">Type</p>
+                            <p class="info-value">Cigarette</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Origin</p>
+                            <p class="info-value">USA / Turkey</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Strength</p>
+                            <p class="info-value">Medium</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Pack</p>
+                            <p class="info-value">20 / Box</p>
+                        </div>
+                    </div>
+                    <p class="card-desc">A distinctive Turkish-American blend with a rich, complex character. Introduced
+                        in 1913, one of the oldest American cigarette brands still in production.</p>
+                    <div class="card-actions">
+                        <button class="card-btn-buy">Add to Order</button>
+                        <button class="card-btn-info" onclick="openModal('camel')">Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card" data-type="cigar premium" data-delay="3">
+                <div class="card-type-bar cigar"></div>
+                <div class="card-inner">
+                    <span class="card-badge" style="background:var(--red-acc)">Icon</span>
+                    <div class="card-model-stage">
+                        <div class="mini-cigar" style="--delay:.8s">
+                            <div class="mini-cigar-wrap">
+                                <div class="mcigarface cap-left" style="--cigar-foot:#4A2810"></div>
+                                <div class="mcigarface cap-right" style="--cigar-cap:#2A1000"></div>
+                                <div class="mcigarface top"
+                                    style="--cigar-hi:#8A6040;--cigar-lo:#6A4020;--cigar-dk:#4A2008"></div>
+                                <div class="mcigarface bottom"
+                                    style="--cigar-hi:#7A5030;--cigar-lo:#5A3010;--cigar-dk:#3A1800"></div>
+                                <div class="mcigarface front" style="--cigar-hi:#9A7050;--cigar-lo:#7A5030"></div>
+                                <div class="mcigarface back" style="--cigar-dk:#402010"></div>
+                                <div class="cigar-band-wrap"
+                                    style="--cband-left:50px;--cband-w:58px;--cband-bg:#1A1A00">
+                                    <div class="cigar-band-name" style="color:#D4A017">MONTECRISTO</div>
+                                    <div class="cigar-band-sub">No. 2 · Torpedo</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-brand-label">Habanos S.A. · Cuba</p>
+                    <h3 class="card-brand-name">Montecristo</h3>
+                    <p class="card-brand-variant">No. 2 · Torpedo</p>
+                    <div class="card-divider"></div>
+                    <div class="card-info-grid">
+                        <div class="card-info-item">
+                            <p class="info-label">Type</p>
+                            <p class="info-value">Torpedo Cigar</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Origin</p>
+                            <p class="info-value">Cuba</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Ring Gauge</p>
+                            <p class="info-value">52</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Length</p>
+                            <p class="info-value">6⅛ inches</p>
+                        </div>
+                    </div>
+                    <p class="card-desc">Perhaps Cuba's most celebrated vitola. The No. 2's torpedo shape concentrates
+                        aromas into an intense, velvety smoke of extraordinary complexity.</p>
+                    <div class="card-actions">
+                        <button class="card-btn-buy">Add to Order</button>
+                        <button class="card-btn-info" onclick="openModal('montecristo')">Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card" data-type="cigarette premium" data-delay="4">
+                <div class="card-type-bar cig"></div>
+                <div class="card-inner">
+                    <div class="card-model-stage">
+                        <div class="mini-cig" style="--ry:-32deg;--delay:1.1s">
+                            <div class="mini-cig-wrap">
+                                <div class="mcf cap-left"></div>
+                                <div class="mcf cap-right" style="--tip-btm:#946018"></div>
+                                <div class="mcf top" style="--cig-top:#F5F0E8"></div>
+                                <div class="mcf bottom" style="--cig-btm:#D0C8B8"></div>
+                                <div class="mcf front" style="--cig-front:#EDE8E0"></div>
+                                <div class="mcf back" style="--cig-back:#C0B8A8"></div>
+                                <div class="mini-tip">
+                                    <div class="mtf top" style="--tip-top:#D4A840"></div>
+                                    <div class="mtf bottom" style="--tip-btm:#946018"></div>
+                                    <div class="mtf front" style="--tip-front:#B08828"></div>
+                                </div>
+                                <div class="mini-band" style="--band-color:#8B0000;--band-left:50px;--band-w:38px">
+                                    DUNHILL</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-brand-label">British American Tobacco</p>
+                    <h3 class="card-brand-name">Dunhill</h3>
+                    <p class="card-brand-variant">International · Fine Cut</p>
+                    <div class="card-divider"></div>
+                    <div class="card-info-grid">
+                        <div class="card-info-item">
+                            <p class="info-label">Type</p>
+                            <p class="info-value">Cigarette</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Origin</p>
+                            <p class="info-value">UK / Switzerland</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Strength</p>
+                            <p class="info-value">Light–Medium</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Pack</p>
+                            <p class="info-value">20 / Box</p>
+                        </div>
+                    </div>
+                    <p class="card-desc">The aristocrat of cigarettes since 1907. Dunhill's refined English blend is
+                        synonymous with understated luxury and meticulous craftsmanship.</p>
+                    <div class="card-actions">
+                        <button class="card-btn-buy">Add to Order</button>
+                        <button class="card-btn-info" onclick="openModal('dunhill')">Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card" data-type="cigar premium" data-delay="5">
+                <div class="card-type-bar cigar"></div>
+                <div class="card-inner">
+                    <span class="card-badge"
+                        style="background:#1A1A1A;color:var(--gold);border:1px solid var(--gold)">Luxury</span>
+                    <div class="card-model-stage">
+                        <div class="mini-cigar" style="--delay:1.4s">
+                            <div class="mini-cigar-wrap">
+                                <div class="mcigarface cap-left" style="--cigar-foot:#503820"></div>
+                                <div class="mcigarface cap-right" style="--cigar-cap:#302010"></div>
+                                <div class="mcigarface top"
+                                    style="--cigar-hi:#A07850;--cigar-lo:#785830;--cigar-dk:#503810"></div>
+                                <div class="mcigarface bottom"
+                                    style="--cigar-hi:#907040;--cigar-lo:#684820;--cigar-dk:#402800"></div>
+                                <div class="mcigarface front" style="--cigar-hi:#B08860;--cigar-lo:#886040"></div>
+                                <div class="mcigarface back" style="--cigar-dk:#402818"></div>
+                                <div class="cigar-band-wrap"
+                                    style="--cband-left:52px;--cband-w:56px;--cband-bg:#F8F4E8">
+                                    <div class="cigar-band-name" style="color:#1A1A1A">DAVIDOFF</div>
+                                    <div class="cigar-band-sub" style="color:#666">Grand Cru No.1</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-brand-label">Oettinger Davidoff AG</p>
+                    <h3 class="card-brand-name">Davidoff</h3>
+                    <p class="card-brand-variant">Grand Cru No. 1</p>
+                    <div class="card-divider"></div>
+                    <div class="card-info-grid">
+                        <div class="card-info-item">
+                            <p class="info-label">Type</p>
+                            <p class="info-value">Premium Cigar</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Origin</p>
+                            <p class="info-value">Dom. Republic</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Ring Gauge</p>
+                            <p class="info-value">43</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Length</p>
+                            <p class="info-value">6 inches</p>
+                        </div>
+                    </div>
+                    <p class="card-desc">The epitome of European cigar elegance. Davidoff's Grand Cru delivers silky,
+                        refined complexity — a meditative smoke for the discerning connoisseur.</p>
+                    <div class="card-actions">
+                        <button class="card-btn-buy">Add to Order</button>
+                        <button class="card-btn-info" onclick="openModal('davidoff')">Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card" data-type="cigarette" data-delay="6">
+                <div class="card-type-bar cig"></div>
+                <div class="card-inner">
+                    <div class="card-model-stage">
+                        <div class="mini-cig" style="--ry:-26deg;--delay:1.7s">
+                            <div class="mini-cig-wrap">
+                                <div class="mcf cap-left"></div>
+                                <div class="mcf cap-right" style="--tip-btm:#806010"></div>
+                                <div class="mcf top" style="--cig-top:#F0EAD8"></div>
+                                <div class="mcf bottom" style="--cig-btm:#C8C0A0"></div>
+                                <div class="mcf front" style="--cig-front:#E8E0C8"></div>
+                                <div class="mcf back" style="--cig-back:#B8B0A0"></div>
+                                <div class="mini-tip">
+                                    <div class="mtf top" style="--tip-top:#B89040"></div>
+                                    <div class="mtf bottom" style="--tip-btm:#806010"></div>
+                                    <div class="mtf front" style="--tip-front:#987020"></div>
+                                </div>
+                                <div class="mini-band" style="--band-color:#CC0000;--band-left:52px;--band-w:40px">
+                                    L·S·M·F·T</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-brand-label">BAT / Reynolds</p>
+                    <h3 class="card-brand-name">Lucky Strike</h3>
+                    <p class="card-brand-variant">Original Red · Toasted</p>
+                    <div class="card-divider"></div>
+                    <div class="card-info-grid">
+                        <div class="card-info-item">
+                            <p class="info-label">Type</p>
+                            <p class="info-value">Cigarette</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Origin</p>
+                            <p class="info-value">USA</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Strength</p>
+                            <p class="info-value">Full</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Process</p>
+                            <p class="info-value">Toasted Tobacco</p>
+                        </div>
+                    </div>
+                    <p class="card-desc">A cultural icon since 1871. Lucky Strike's unique "toasted" American tobacco
+                        process lends it a distinctive smooth character unlike any other brand.</p>
+                    <div class="card-actions">
+                        <button class="card-btn-buy">Add to Order</button>
+                        <button class="card-btn-info" onclick="openModal('luckystrike')">Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card" data-type="cigar" data-delay="7">
+                <div class="card-type-bar cigar"></div>
+                <div class="card-inner">
+                    <div class="card-model-stage">
+                        <div class="mini-cigar" style="--delay:2s">
+                            <div class="mini-cigar-wrap">
+                                <div class="mcigarface cap-left" style="--cigar-foot:#4B2810"></div>
+                                <div class="mcigarface cap-right" style="--cigar-cap:#2B1000"></div>
+                                <div class="mcigarface top"
+                                    style="--cigar-hi:#8B5A30;--cigar-lo:#6B3A10;--cigar-dk:#4B2000"></div>
+                                <div class="mcigarface bottom"
+                                    style="--cigar-hi:#7B4A20;--cigar-lo:#5B2A00;--cigar-dk:#3B1800"></div>
+                                <div class="mcigarface front" style="--cigar-hi:#9B6A40;--cigar-lo:#7B4A20"></div>
+                                <div class="mcigarface back" style="--cigar-dk:#3B2010"></div>
+                                <div class="cigar-band-wrap"
+                                    style="--cband-left:48px;--cband-w:58px;--cband-bg:#8B0000">
+                                    <div class="cigar-band-name" style="color:#FFD700">R Y JULIETA</div>
+                                    <div class="cigar-band-sub">Churchill · Cuba</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-brand-label">Habanos S.A. · Cuba</p>
+                    <h3 class="card-brand-name">Romeo y Julieta</h3>
+                    <p class="card-brand-variant">Churchill · Churchill</p>
+                    <div class="card-divider"></div>
+                    <div class="card-info-grid">
+                        <div class="card-info-item">
+                            <p class="info-label">Type</p>
+                            <p class="info-value">Churchill Cigar</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Origin</p>
+                            <p class="info-value">Cuba</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Ring Gauge</p>
+                            <p class="info-value">47</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Length</p>
+                            <p class="info-value">7 inches</p>
+                        </div>
+                    </div>
+                    <p class="card-desc">Named after the greatest lover in literature, beloved by Churchill himself. A
+                        medium-bodied masterpiece of floral, cedar and creamy complexity.</p>
+                    <div class="card-actions">
+                        <button class="card-btn-buy">Add to Order</button>
+                        <button class="card-btn-info" onclick="openModal('romeo')">Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card" data-type="cigarette menthol" data-delay="8">
+                <div class="card-type-bar menthol"></div>
+                <div class="card-inner">
+                    <div class="card-model-stage">
+                        <div class="mini-cig" style="--ry:-24deg;--delay:2.3s">
+                            <div class="mini-cig-wrap">
+                                <div class="mcf cap-left"></div>
+                                <div class="mcf cap-right" style="--tip-btm:#A0A0A0"></div>
+                                <div class="mcf top" style="--cig-top:#F8F5F0"></div>
+                                <div class="mcf bottom" style="--cig-btm:#D8D0C0"></div>
+                                <div class="mcf front" style="--cig-front:#F0EDE5"></div>
+                                <div class="mcf back" style="--cig-back:#C8C0B0"></div>
+                                <div class="mini-tip">
+                                    <div class="mtf top"
+                                        style="--tip-top:#E8E8E8;background:linear-gradient(#E8E8E8,#C0C0C0)"></div>
+                                    <div class="mtf bottom" style="--tip-btm:#A0A0A0"></div>
+                                    <div class="mtf front" style="--tip-front:#D0D0D0"></div>
+                                </div>
+                                <div class="mini-band" style="--band-color:#003366;--band-left:52px;--band-w:38px">
+                                    PARLIAMENT</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-brand-label">Philip Morris International</p>
+                    <h3 class="card-brand-name">Parliament</h3>
+                    <p class="card-brand-variant">Silver · Recessed Filter</p>
+                    <div class="card-divider"></div>
+                    <div class="card-info-grid">
+                        <div class="card-info-item">
+                            <p class="info-label">Type</p>
+                            <p class="info-value">Cigarette</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Origin</p>
+                            <p class="info-value">USA</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Filter</p>
+                            <p class="info-value">Recessed</p>
+                        </div>
+                        <div class="card-info-item">
+                            <p class="info-label">Pack</p>
+                            <p class="info-value">20 / Box</p>
+                        </div>
+                    </div>
+                    <p class="card-desc">Distinguished by its patented recessed charcoal filter, Parliament Silver
+                        delivers a remarkably clean, smooth taste prized by discerning smokers worldwide.</p>
+                    <div class="card-actions">
+                        <button class="card-btn-buy">Add to Order</button>
+                        <button class="card-btn-info" onclick="openModal('parliament')">Details</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-num" id="stat1">0</div>
+            <div class="stat-label">Premium Brands</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num" id="stat2">0</div>
+            <div class="stat-label">Countries of Origin</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num" id="stat3">0</div>
+            <div class="stat-label">Years Combined Heritage</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num" id="stat4">0</div>
+            <div class="stat-label">Satisfied Clients</div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-tobacco-types">
+            <h3 class="tobacco-types-title">Mastery of the Leaf: Tobacco Varieties</h3>
+            <div class="tobacco-grid">
+
+                <div class="tobacco-card">
+                    <div class="tobacco-anim-stage">
+                        <div class="ash-pile"></div>
+                        <div class="glowing-ember"></div>
+                        <div class="smoke-puff s1"></div>
+                        <div class="smoke-puff s2"></div>
+                        <div class="smoke-puff s3"></div>
+                    </div>
+                    <h4 class="tobacco-name">Virginia (Flue-Cured)</h4>
+                    <p class="tobacco-desc">Known as "Brightleaf," this variety is cured in heated barns, resulting in a
+                        golden-yellow color. It boasts a naturally high sugar content, delivering a light, bright, and
+                        subtly sweet flavor profile.</p>
+                </div>
+
+                <div class="tobacco-card">
+                    <div class="tobacco-anim-stage">
+                        <div class="ash-pile"></div>
+                        <div class="glowing-ember"
+                            style="background: radial-gradient(ellipse at center, #fff 0%, #ff5e00 20%, #cc1100 50%, #222 100%);">
+                        </div>
+                        <div class="smoke-puff s2"></div>
+                        <div class="smoke-puff s3"></div>
+                        <div class="smoke-puff s1"></div>
+                    </div>
+                    <h4 class="tobacco-name">Burley (Air-Cured)</h4>
+                    <p class="tobacco-desc">Air-cured in open barns for several weeks, Burley leaves turn a rich brown.
+                        With virtually no natural sugar, it offers a robust, earthy, and deep cocoa-like character that
+                        absorbs flavorings exceptionally well.</p>
+                </div>
+
+                <div class="tobacco-card">
+                    <div class="tobacco-anim-stage">
+                        <div class="ash-pile"></div>
+                        <div class="glowing-ember"
+                            style="background: radial-gradient(ellipse at center, #ff8800 0%, #cc1100 40%, #222 100%);">
+                        </div>
+                        <div class="smoke-puff s3"></div>
+                        <div class="smoke-puff s1"></div>
+                        <div class="smoke-puff s2"></div>
+                    </div>
+                    <h4 class="tobacco-name">Oriental (Sun-Cured)</h4>
+                    <p class="tobacco-desc">Grown in the dry climates of the Mediterranean and sun-cured. These small
+                        leaves are packed with natural oils, offering a highly aromatic, spicy, and fragrant smoke that
+                        adds complexity to any premium blend.</p>
+                </div>
+
+                <div class="tobacco-card">
+                    <div class="tobacco-anim-stage">
+                        <div class="ash-pile"></div>
+                        <div class="glowing-ember"></div>
+                        <div class="smoke-puff s1"></div>
+                        <div class="smoke-puff s2"></div>
+                        <div class="smoke-puff s3"></div>
+                    </div>
+                    <h4 class="tobacco-name">The American Blend</h4>
+                    <p class="tobacco-desc">The industry gold standard, meticulously combining the sweetness of
+                        Virginia, the depth of Burley, and the spice of Oriental tobaccos to create a perfectly
+                        balanced, full-flavored cigarette experience.</p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="footer-top">
+            <div>
+                <div class="footer-brand-name">IMPERIALE</div>
+                <p class="footer-desc">A distinguished house of the world's most celebrated tobacco brands, presented
+                    for the connoisseur and collector.</p>
+
+                <div class="footer-scene-wrap">
+                    <div class="fs-cig">
+                        <div class="fs-cherry"></div>
+                        <div class="fs-smoke-trail"></div>
+                        <div class="fs-filter"></div>
+                    </div>
+                    <div class="fs-lighter">
+                        <div class="fsl-body"></div>
+                        <div class="fsl-lid"></div>
+                        <div class="fsl-flame"></div>
+                    </div>
+                </div>
+
+                <p style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:.15em;color:var(--text-dim)">© 2024
+                    IMPERIALE TOBACCO HOUSE</p>
+            </div>
+            <div>
+                <p class="footer-heading">Collection</p>
+                <ul class="footer-links">
+                    <li><a href="#">Cuban Cigars</a></li>
+                    <li><a href="#">New World Cigars</a></li>
+                    <li><a href="#">Premium Cigarettes</a></li>
+                    <li><a href="#">Menthol Range</a></li>
+                    <li><a href="#">Limited Editions</a></li>
+                </ul>
+            </div>
+            <div>
+                <p class="footer-heading">Services</p>
+                <ul class="footer-links">
+                    <li><a href="#">Corporate Gifting</a></li>
+                    <li><a href="#">Wholesale Orders</a></li>
+                    <li><a href="#">Custom Packaging</a></li>
+                    <li><a href="#">Expert Consultation</a></li>
+                </ul>
+            </div>
+            <div>
+                <p class="footer-heading">Company</p>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Heritage</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="footer-copy">All rights reserved · IMPERIALE™</p>
+            <p class="footer-legal">This website is intended for adults of legal smoking age only. Tobacco products are
+                for adults 18 years and over. Please enjoy responsibly.</p>
+            <p class="footer-copy" style="text-align:right">Trade Enquiries Welcome</p>
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="modalOverlay" onclick="handleModalClick(event)">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        /* ─── CURSOR ─── */
+        const dot = document.getElementById('cursorDot');
+        const ring = document.getElementById('cursorRing');
+        let mx = 0, my = 0, rx = 0, ry = 0;
+        document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+        (function tick() {
+            rx += (mx - rx) * .15; ry += (my - ry) * .15;
+            dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+            ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+            requestAnimationFrame(tick);
+        })();
+
+        /* ─── NAV SCROLL ─── */
+        window.addEventListener('scroll', () => {
+            document.getElementById('mainNav').classList.toggle('scrolled', scrollY > 60);
+        });
+
+        /* ─── FILTER ─── */
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const f = this.dataset.filter;
+                document.querySelectorAll('.product-card').forEach((card, i) => {
+                    const types = card.dataset.type || '';
+                    const show = f === 'all' || types.includes(f);
+                    card.style.display = show ? 'block' : 'none';
+                    card.style.animationDelay = (i * .08) + 's';
+                });
+            });
+        });
+
+        /* ─── COUNTER ANIMATION ─── */
+        function animateCounter(el, target, suffix = '') {
+            let start = 0, step = Math.ceil(target / 60);
+            const t = setInterval(() => {
+                start = Math.min(start + step, target);
+                el.textContent = start.toLocaleString() + suffix;
+                if (start >= target) clearInterval(t);
+            }, 28);
+        }
+        const statsObs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    animateCounter(document.getElementById('stat1'), 48);
+                    animateCounter(document.getElementById('stat2'), 16);
+                    animateCounter(document.getElementById('stat3'), 850, '+');
+                    animateCounter(document.getElementById('stat4'), 12000, '+');
+                    statsObs.disconnect();
+                }
+            });
+        }, { threshold: .5 });
+        statsObs.observe(document.querySelector('.stats-bar'));
+
+        /* ─── CARD SCROLL REVEAL ─── */
+        const cardObs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.style.animationPlayState = 'running';
+                    cardObs.unobserve(e.target);
+                }
+            });
+        }, { threshold: .1 });
+        document.querySelectorAll('.product-card').forEach((c, i) => {
+            c.style.animationDelay = (i * .1) + 's';
+            c.style.animationPlayState = 'paused';
+            cardObs.observe(c);
+        });
+
+        /* ─── MODAL DATA ─── */
+        const brands = {
+            marlboro: {
+                brand: 'Philip Morris International', name: 'Marlboro', variant: 'Red · Full Flavour',
+                type: 'Cigarette', origin: 'USA', strength: 'Full', pack: '20 sticks / Hard Box',
+                since: '1924', blend: 'American Virginia Blend', filter: 'Cellulose Acetate',
+                desc: 'The world\'s most recognised cigarette brand. Originally marketed as a women\'s cigarette in the 1920s, Marlboro was reinvented as a rugged, masculine brand through the iconic "Marlboro Man" campaigns of 1954. Today it commands the highest market share of any cigarette brand globally. The Red variant uses a robust Virginia tobacco blend prized for its bold, earthy character.'
+            },
+            cohiba: {
+                brand: 'Habanos S.A. · Cuba', name: 'Cohiba', variant: 'Behike BHK 52',
+                type: 'Premium Torpedo Cigar', origin: 'Cuba', strength: 'Full', pack: 'Single / Box of 10',
+                since: '1966', blend: 'Triple Ligero + Medio Tiempo', wrapper: 'Colorado Claro',
+                desc: 'Created in 1966 exclusively for Fidel Castro and Cuban diplomats, Cohiba was not available commercially until 1982. The Behike line, introduced in 2010, uses the ultra-rare Medio Tiempo leaf — found only on the top two leaves of select tobacco plants — blended with Seco and Ligero fillers. Considered by many the finest cigar ever produced.'
+            },
+            camel: {
+                brand: 'R.J. Reynolds Tobacco', name: 'Camel', variant: 'Original Turkish Blend',
+                type: 'Cigarette', origin: 'USA / Turkey', strength: 'Medium', pack: '20 sticks / Soft Pack',
+                since: '1913', blend: 'Turkish–American Blend', filter: 'Cellulose Acetate',
+                desc: 'Introduced in 1913, Camel popularised the pre-packaged cigarette format and almost single-handedly created modern tobacco marketing. Its distinctive Turkish-American blend combines Oriental tobaccos from Turkey and Greece with Bright and Burley American tobaccos for a complex, slightly sweet and earthy character. The camel on the pack features a real animal — Old Joe — from the Barnum and Bailey Circus.'
+            },
+            montecristo: {
+                brand: 'Habanos S.A. · Cuba', name: 'Montecristo', variant: 'No. 2 · Torpedo',
+                type: 'Torpedo Cigar', origin: 'Cuba', strength: 'Medium-Full', pack: 'Single / Box of 25',
+                since: '1935', blend: 'Vuelta Abajo Filler', wrapper: 'Colorado',
+                desc: 'Founded in 1935 at the H. Upmann factory in Havana, Montecristo is named after The Count of Monte Cristo — allegedly read aloud to cigar rollers while they worked. The No. 2 Torpedo is regarded as one of the world\'s truly perfect cigars, its pointed head concentrating the blend\'s spice, cedar, coffee and chocolate notes into a revelatory finale.'
+            },
+            dunhill: {
+                brand: 'British American Tobacco', name: 'Dunhill', variant: 'International · Fine Cut',
+                type: 'Premium Cigarette', origin: 'UK / Switzerland', strength: 'Light–Medium', pack: '20 sticks / Hard Box',
+                since: '1907', blend: 'Virginia Fine Cut', filter: 'Recessed Charcoal',
+                desc: 'Alfred Dunhill founded his tobacco empire in London in 1907, supplying bespoke blends to European royalty and aristocracy. Dunhill cigarettes maintain an uncompromisingly sophisticated English character — lighter, more refined and more aromatic than American blends. The hard red box with gold text remains one of the most elegant cigarette packages ever designed.'
+            },
+            davidoff: {
+                brand: 'Oettinger Davidoff AG · Basel', name: 'Davidoff', variant: 'Grand Cru No. 1',
+                type: 'Premium Cigar', origin: 'Dominican Republic', strength: 'Mild–Medium', pack: 'Single / Box of 25',
+                since: '1968', blend: 'Dom. Rep. Piloto Cubano', wrapper: 'Ecuador Connecticut',
+                desc: 'Zino Davidoff, the "ambassador of the good life," created his first cigar line in Geneva in 1968 using aged Cuban tobaccos. After production moved to the Dominican Republic in 1991, Davidoff refined its profile to a silky, sophisticated mildness. The Grand Cru No. 1 — a classic Lonsdale — exemplifies the house style: floral, creamy and perfectly balanced with a long, clean finish.'
+            },
+            luckystrike: {
+                brand: 'British American Tobacco / Reynolds', name: 'Lucky Strike', variant: 'Original Red',
+                type: 'Cigarette', origin: 'USA', strength: 'Full', pack: '20 sticks / Soft Pack',
+                since: '1871', blend: 'Toasted American Blend', filter: 'Cellulose Acetate',
+                desc: 'Lucky Strike is one of the oldest continuously produced cigarette brands in existence, dating to 1871. Its defining characteristic is the proprietary "toasting" process — gentle heat application that the brand claims removes certain impurities and enhances natural tobacco flavours. The iconic circular target bullseye packaging, designed in 1942 by Raymond Loewy, is considered a landmark of 20th century graphic design.'
+            },
+            romeo: {
+                brand: 'Habanos S.A. · Cuba', name: 'Romeo y Julieta', variant: 'Churchill',
+                type: 'Churchill Cigar', origin: 'Cuba', strength: 'Medium', pack: 'Single / Box of 25',
+                since: '1875', blend: 'Vuelta Abajo Filler', wrapper: 'Colorado Claro',
+                desc: 'Founded in 1875, Romeo y Julieta is one of Havana\'s oldest cigar houses. Sir Winston Churchill discovered the brand during a visit to Cuba in 1946 and thereafter smoked up to ten cigars daily. In his honour, Habanos named the longest vitola in their portfolio the "Churchill." Medium in body with notes of coffee, earth, cedar and a floral sweetness, it remains among the most romantic and accessible of Havana\'s great cigars.'
+            },
+            parliament: {
+                brand: 'Philip Morris International', name: 'Parliament', variant: 'Silver · Recessed Filter',
+                type: 'Cigarette', origin: 'USA', strength: 'Light', pack: '20 sticks / Hard Box',
+                since: '1931', blend: 'Blended American', filter: 'Recessed Charcoal Capsule',
+                desc: 'Parliament is distinguished by its patented recessed charcoal filter — set 4mm back from the end of the cigarette — which is said to deliver a cleaner, cooler draw than conventional filters. Launched in 1931 and associated with sophisticated urban consumers, Parliament Silver is particularly popular in Asia and Eastern Europe, where it commands premium pricing and loyal admiration for its smooth, unobtrusive taste.'
+            }
+        };
+
+        function openModal(id) {
+            const d = brands[id]; if (!d) return;
+            document.getElementById('modalContent').innerHTML = `
+    <div class="modal-header">
+      <p class="modal-brand">${d.brand}</p>
+      <h2 class="modal-title">${d.name}</h2>
+      <p class="modal-variant">${d.variant}</p>
+      <div class="modal-divider"></div>
+    </div>
+    <div class="modal-grid">
+      <div class="modal-stat"><p class="modal-stat-label">Type</p><p class="modal-stat-value">${d.type}</p></div>
+      <div class="modal-stat"><p class="modal-stat-label">Origin</p><p class="modal-stat-value">${d.origin}</p></div>
+      <div class="modal-stat"><p class="modal-stat-label">Strength</p><p class="modal-stat-value">${d.strength}</p></div>
+      <div class="modal-stat"><p class="modal-stat-label">Packaging</p><p class="modal-stat-value">${d.pack}</p></div>
+      <div class="modal-stat"><p class="modal-stat-label">Since</p><p class="modal-stat-value">${d.since}</p></div>
+      <div class="modal-stat"><p class="modal-stat-label">Blend</p><p class="modal-stat-value">${d.blend}</p></div>
+    </div>
+    <p class="modal-desc">${d.desc}</p>
+    <div style="margin-top:32px;display:flex;gap:16px">
+      <button class="card-btn-buy" style="flex:1;font-size:11px;padding:14px">Add to Enquiry</button>
+      <button class="card-btn-info" onclick="closeModal()" style="font-size:11px">Close</button>
+    </div>
+  `;
+            document.getElementById('modalOverlay').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function handleModalClick(e) {
+            if (e.target === document.getElementById('modalOverlay')) closeModal();
+        }
+
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    </script>
+</body>
+
+</html>
